@@ -55,19 +55,20 @@ class CitySearch extends Component {
                 <form>
                     <input type="text" name="cityName" placeholder="City Name" onChange={this.onChange}></input>
                 </form>
-                <div  className = "dataContainer"> 
-                <header className="headerContainer">Zip Codes</header>
-                    {this.state.error===true ? <div className="error">No Results</div> : 
-                    this.state.cityData.map( (item,index) => (
-                        <div>
-                            <div className ="innerDataContainer">
-                            <ul>
-                                <li>{item}</li>
-                            </ul>
+                {this.state.error===true ? <div className="error">No Results</div> : 
+                <div className = "dataContainer"> 
+                    <header className="headerContainer">Zip Codes</header>
+                        {this.state.cityData.map( (item,index) => (
+                            <div>
+                                <div className ="innerDataContainer">
+                                <ul>
+                                    <li>{item}</li>
+                                </ul>
+                                </div>
                             </div>
-                        </div>
-                    ))} 
+                        ))}
                 </div>
+                }
             </main>
         )
     }
