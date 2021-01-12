@@ -53,7 +53,7 @@ class CitySearch extends Component {
             <main>
                 <header id ="main-header">City Search App</header>
                 <form>
-                    <input type="text" name="cityName" placeholder="City Name" onChange={this.onChange}></input>
+                    <input type="text" name="cityName" placeholder="Enter City..." onChange={this.onChange}></input>
                 </form>
                 {this.state.error===true ? <div className="error">No Results</div> : 
                 <div className = "dataContainer"> 
