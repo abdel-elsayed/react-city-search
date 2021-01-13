@@ -6,7 +6,8 @@ class CitySearch extends Component {
         super();
         this.state = {
             cityName: "",
-            cityData: [],
+            zipCodes: [],
+            stateData: [],
             error: false,
         }
     }
@@ -33,42 +34,79 @@ class CitySearch extends Component {
             else{
                 throw new Error("Unable to fetch data!!")
             }
-        }).then(data => {
-            console.log(data)
-            this.setState({
-                isLoading: false,
-                cityData: data,
-                error: false
-            })
+        }).then(zipCodes => {
+            //console.log(zipCodes)
+            let allData =this.state.stateData;
+            let seen = {};
+
+            zipCodes.forEach(zip=>{
+                fetch("http://ctp-zip-api.herokuapp.com/zip/" + zip).then(response=>{
+                return response.json()
+                }).then(data=>{
+                    data.forEach((item) => {
+                        console.log("seen",seen)
+                        if(!seen[item.State]){
+                            seen[item.State] = true
+                            allData.push(item);
+                        }
+                    });
+                    this.setState({stateData:allData})
+                })
+                this.setState({
+                    isLoading: false,
+                    zipCodes: zipCodes,
+                    error: false
+                })
+            })  
+           
         }).catch(e => {
             this.setState({
                 error: true
             })
         })
     }
-
+        
+    
     render(){
-        console.log("state data: ", this.state.zipData)
         return(
             <main>
                 <header id ="main-header">City Search App</header>
                 <form>
                     <input type="text" name="cityName" placeholder="Enter City..." onChange={this.onChange}></input>
                 </form>
-                {this.state.error===true ? <div className="error">No Results</div> : 
-                <div className = "dataContainer"> 
-                    <header className="headerContainer">Zip Codes</header>
-                        {this.state.cityData.map( (item,index) => (
-                            <div>
-                                <div className ="innerDataContainer">
-                                <ul>
-                                    <li>{item}</li>
-                                </ul>
-                                </div>
-                            </div>
-                        ))}
-                </div>
-                }
+                <div style={{display: "flex", flexDirection:"row"}}>
+                    {this.state.error===true ? <div className="error">No Results</div> : 
+                    
+                    <div className = "dataContainer"> 
+                            <header className="headerContainer">Zip Codes</header>
+                                {this.state.zipCodes.map( (item,index) => (
+                                    <div key ={index}>
+                                        <div className ="innerDataContainer">
+                                        <ul>
+                                            <li>{item}</li>
+                                        </ul>
+                                        </div>
+                                    </div>
+                                ))}
+                        </div>
+                        }
+
+                        {this.state.error===true ? <div className="error">No Results</div> : 
+                        <div className = "dataContainer"> 
+                            <header className="headerContainer">States were city is found</header>
+                                {this.state.stateData.map( (item,index) => (
+
+                                    <div key ={index}>
+                                        <div className ="innerDataContainer">
+                                        <ul>
+                                            <li >{item.State}</li>
+                                        </ul>
+                                        </div>
+                                    </div>
+                                ))}
+                        </div>
+                    }
+                </div> 
             </main>
         )
     }
