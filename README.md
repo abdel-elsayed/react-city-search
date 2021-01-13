@@ -1,4 +1,8 @@
-# Code Sandbox link to view the app
+# ReactJS City Search Web Application
+This project is part of Tech Talent Pipeline Full-Satck web-development bootcamp.
+
+
+## CodeSandbox.com link to view the app
 https://codesandbox.io/s/strange-diffie-4bw64?file=/src/components/CitySearch.js
 
 
